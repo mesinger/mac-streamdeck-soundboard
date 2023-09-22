@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>com.elgato.sample PI</title>
+    <link rel="stylesheet" href="sdpi.css">
+</head>
+
+<body>
+<div class="sdpi-wrapper">
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Name</div>
+        <input class="sdpi-item-value" id="file" value="" placeholder="File..."
+               onchange="sendValueToPlugin(this.value)">
+    </div>
+</div>
+<script>
+    // this is our global websocket, used to communicate from/to Stream Deck software
+    // and some info about our plugin, as sent by Stream Deck software
+    let websocket = null,
+        uuid = null,
+        actionInfo = {};
+
+    function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
+        uuid = inUUID;
+        // please note: the incoming arguments are of type STRING, so
+        // in case of the inActionInfo, we must parse it into JSON first
+        actionInfo = JSON.parse(inActionInfo); // cache the info
+        websocket = new WebSocket('ws://localhost:' + inPort);
+
+        // if connection was established, the websocket sends
+        // an 'onopen' event, where we need to register our PI
+        websocket.onopen = function () {
+            const json = {
+                event: inRegisterEvent,
+                uuid: inUUID
+            };
+            // register property inspector to Stream Deck
+            websocket.send(JSON.stringify(json));
+        }
+    }
+
+    // our method to pass values to the plugin
+    function sendValueToPlugin(value) {
+        if (websocket) {
+            const json = {
+                "action": actionInfo['action'],
+                "event": "sendToPlugin",
+                "context": uuid,
+                "payload": {
+                    file: value
+                }
+            };
+            websocket.send(JSON.stringify(json));
+        }
+    }
+</script>
+</body>
+</html>

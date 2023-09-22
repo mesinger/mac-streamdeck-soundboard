@@ -1,0 +1,36 @@
+{
+  "Actions": [
+    {
+      "Icon": "icon", 
+      "Name": "Mesi Action Name Soundboard",
+      "States": [
+        {
+          "Image": "defaultImage",
+          "TitleAlignment": "middle", 
+          "FontSize": "17"
+        }
+      ], 
+      "SupportedInMultiActions": false,
+      "Tooltip": "This plays a sound",
+      "UUID": "mesi.soundboard"
+    }
+  ], 
+  "SDKVersion": 2,
+  "Author": "mesinger",
+  "CodePathMac": "soundboard",
+  "PropertyInspectorPath": "index.html",
+  "Description": "Soundboard for Mac.",
+  "Name": "Mesi Name Soundboard",
+  "Icon": "pluginIcon", 
+  "Version": "1.2",
+  "OS": [
+    {
+        "Platform": "mac", 
+        "MinimumVersion" : "10.11"
+    }
+  ],
+  "Software": 
+    {
+        "MinimumVersion" : "4.1"
+    }
+}
