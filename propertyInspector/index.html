@@ -8,10 +8,9 @@
 
 <body>
 <div class="sdpi-wrapper">
-    <div class="sdpi-item">
-        <div class="sdpi-item-label">Name</div>
-        <input class="sdpi-item-value" id="file" value="" placeholder="File..."
-               onchange="sendValueToPlugin(this.value)">
+    <div class="sdpi-item" id="my_private_file_selectorx">
+        <div class="sdpi-item-label">Select File</div>
+        <input class="sdpi-item-value" id="fileSelector" type="file" accept=".wav" onchange="sendValueToPlugin(this.value)">
     </div>
 </div>
 <script>
@@ -42,17 +41,22 @@
 
     // our method to pass values to the plugin
     function sendValueToPlugin(value) {
-        if (websocket) {
-            const json = {
-                "action": actionInfo['action'],
-                "event": "sendToPlugin",
-                "context": uuid,
-                "payload": {
-                    file: value
-                }
-            };
-            websocket.send(JSON.stringify(json));
+        if (!websocket) {
+            return;
         }
+
+        value = decodeURIComponent(value.replace(/^C:\\fakepath\\/, ''));
+
+        const json = {
+            "action": actionInfo['action'],
+            "event": "sendToPlugin",
+            "context": uuid,
+            "payload": {
+                file: value
+            }
+        };
+
+        websocket.send(JSON.stringify(json));
     }
 </script>
 </body>
